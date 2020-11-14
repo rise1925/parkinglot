@@ -1,4 +1,4 @@
-echo "# parking" >> README.md
+echo "# parkinglot" >> README.md
 git init
 git add README.md
 git commit -m "first commit"
