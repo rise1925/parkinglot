@@ -53,25 +53,31 @@
 </div>
               
 <script>
-setInterval(intervalFunc, 1000);
-function intervalFunc() {
+    /* DB 에서 받은 값을 1초에 한번씩 페이지에서 갱신 */
+    /* Backend 에서 fronend 로 실시간으로 DB 변화량을 표기 하기 위해 ajax 통신 */
+    setInterval(intervalFunc, 1000);
+    function intervalFunc() {
     var html_code = "";
-    var no_data = "";
-    var name_data = "";
-    var parking_data = "";
-    var date_data = "";
+    var no_data = "";       // 순번 값         ex. 28
+    var name_data = "";     // 주차장 이름 값   ex. 제 1 주차장
+    var parking_data = "";  // 현재 주차 여부   ex. 1
+    var date_data = "";     // 날짜 값         ex. 2020-11-15 09:00:00
     var car_check = "";
     $.ajax({
         url:'/index',
         async:true,
         type: 'POST',
-      dataType:'json',
+        dataType:'json',
     success:function(msg){
       $('tbody#contents').empty();
       $('div#park_check').empty();
       for(var i = 0 ; i < msg.message1.length ; i++){ 
         no_data = String(msg.message1[i].no);
         name_data = String(msg.message1[i].name);
+        
+        /* 값이 1이면 "차량 존재", 0이면 "차량 없음" 으로 표기 */
+        /* 값이 1이면 주차되어있는 이미지 표기, 0이면 비어있는 이미지 표기 */
+
         if(msg.message1[i].parking == 1){
             parking_data = '<img src="img/full_icon.png" style="width:20px">' + ' &nbsp; 차량 존재';
             if(msg.message1[0].parking == 1){
@@ -97,8 +103,8 @@ function intervalFunc() {
         }
         
       }
-      document.getElementById("contents").innerHTML = html_code;
-      document.getElementById("park_check").innerHTML = car_check;
+      document.getElementById("contents").innerHTML = html_code;      // html_code 변수 내용을 id가 contents 에 표기 
+      document.getElementById("park_check").innerHTML = car_check;    // car_check 변수 내용을 id가 park_check 에 표기
 
       html_code = "";
       car_check = "";

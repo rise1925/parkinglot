@@ -17,6 +17,7 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParaser.urlencoded({extended: true}));
 
+/* 아두이노로부터 DB에 값을 받고 insert 하는 쿼리 */
 app.get('/process/login', function(req, res) {  
     var paramId = req.param('id');
     var sen_v = req.param('sensor');
@@ -38,6 +39,7 @@ app.get('/process/login', function(req, res) {
     res.end();
 });
 
+/* index 페이지에 접속하면 모든 데이터값을 front-end 로 보내기 */
 app.post('/index', function(req, res) {  
     var sql = "SELECT no, name, parking, DATE_FORMAT(date, '%Y-%m-%d %H:%i:%s')date FROM management.arduino_parking_lot order by no desc limit 10;";
         pool.getConnection(function(err, con) {
@@ -62,10 +64,12 @@ app.post('/index', function(req, res) {
         });   
 });
 
+/* http://localhost:3000 으로 접속시 index로 리다이렉션 */
 app.get('/', function(req, res) {
     res.render('index');
 });
 
+/* 3000 포트로 Node.JS서버 활성화 */
 var server = app.listen(3000,function(){
     console.log('Express 서버가 3000번 포트에서 시작됨.');
 });
